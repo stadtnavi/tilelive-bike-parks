@@ -24,5 +24,5 @@ describe("BikeParkSource", function() {
       })
 
     })
-  });
+  }).timeout(5000);
 });
