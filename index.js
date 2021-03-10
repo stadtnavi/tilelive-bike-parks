@@ -56,8 +56,10 @@ class BikeParkSource {
   constructor(uri, callback) {
     this.cacheKey = "tileindex";
     this.cache = new NodeCache({ stdTTL: 15, useClones: false });
-    if(!uri.protocol){
+    if(uri.hostname.startsWith("opentripplanner")) {
       uri.protocol = "http:"
+    } else {
+      uri.protocol = "https:"
     }
     this.url = uri;
     callback(null, this);
