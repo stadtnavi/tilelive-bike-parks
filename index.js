@@ -13,6 +13,7 @@ const query = `
       name
       lon
       lat
+      covered
     }
   }`;
 
