@@ -5,7 +5,7 @@ const BikeParkSource = require("./index");
 describe("BikeParkSource", function() {
 
   it("fetch data", (done) => {
-    const url = "https://api.staging.stadtnavi.eu/routing/v1/router/index/graphql";
+    const url = new URL('https://api.staging.stadtnavi.eu/routing/v1/router/index/graphql');
     const source = new BikeParkSource(url, () => {});
     assert.ok(source);
 
