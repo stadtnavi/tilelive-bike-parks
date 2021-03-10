@@ -9,11 +9,12 @@ const _ = require("lodash");
 const query = `
   query bikeparks {
     bikeParks {
-      id
+      bikeParkId
       name
       lon
       lat
       covered
+      spacesAvailable
     }
   }`;
 
@@ -45,9 +46,10 @@ const convertToGeoJson = (json) => {
     type: "Feature",
     geometry: {type: "Point", coordinates: [station.lon, station.lat]},
     properties: {
-      id: station.id,
+      id: station.bikeParkId,
       name: station.name,
       covered: station.covered,
+      spacesAvailable: station.spacesAvailable,
     }
   }))}
   return geoJson;
