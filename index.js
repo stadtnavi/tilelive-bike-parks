@@ -55,7 +55,7 @@ const convertToGeoJson = (json) => {
 class BikeParkSource {
   constructor(uri, callback) {
     this.cacheKey = "tileindex";
-    this.cache = new NodeCache({ stdTTL: 15, useClones: false });
+    this.cache = new NodeCache({ stdTTL: 3600, useClones: false });
     if(uri.hostname.startsWith("opentripplanner")) {
       uri.protocol = "http:"
     } else {
