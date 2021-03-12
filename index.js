@@ -15,6 +15,7 @@ const query = `
       lat
       covered
       spacesAvailable
+      maxCapacity
     }
   }`;
 
@@ -42,17 +43,28 @@ const getBikeParks = (url, callback) => {
 };
 
 const convertToGeoJson = (json) => {
-  const geoJson = {type: "FeatureCollection", features: json.data.bikeParks.map(station => ({
-    type: "Feature",
-    geometry: {type: "Point", coordinates: [station.lon, station.lat]},
-    properties: {
-      id: station.bikeParkId,
-      name: station.name,
-      covered: station.covered,
-      spacesAvailable: station.spacesAvailable,
+  const features = json.data.bikeParks.map(
+    ({ lat, lon, bikeParkId, name, covered, spacesAvailable, maxCapacity }) => {
+      return {
+        type: "Feature",
+          geometry: {type: "Point", coordinates: [lon, lat]},
+          properties: {
+            id: bikeParkId,
+            name,
+            covered,
+            spacesAvailable,
+            maxCapacity
+          }
+      }
     }
-  }))}
-  return geoJson;
+
+  );
+  console.log(`Fetched ${features.length} bike parks`);
+
+  return {
+    type: "FeatureCollection",
+    features
+  };
 }
 
 class BikeParkSource {
