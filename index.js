@@ -6,6 +6,8 @@ const zlib = require("zlib");
 const NodeCache = require("node-cache" );
 const _ = require("lodash");
 
+const url = process.env.GRAPHQL_URL || "https://api.stadtnavi.de/routing/v1/router/index/graphql";
+
 const query = `
   query bikeparks {
     bikeParks {
@@ -20,6 +22,7 @@ const query = `
   }`;
 
 const getBikeParks = (url, callback) => {
+  console.log(`Requesting bike parking lots from ${url}`);
   request(
     {
       url: url,
@@ -59,7 +62,7 @@ const convertToGeoJson = (json) => {
     }
 
   );
-  console.log(`Fetched ${features.length} bike parks`);
+  console.log(`Fetched ${features.length} bike parks from ${url}`);
 
   return {
     type: "FeatureCollection",
@@ -72,17 +75,11 @@ class BikeParkSource {
     this.cacheKey = "tileindex";
     const ttl = 60 * 60 * 6; // 6 hours
     this.cache = new NodeCache({ stdTTL: ttl, useClones: false });
-    if(uri.hostname.startsWith("opentripplanner")) {
-      uri.protocol = "http:"
-    } else {
-      uri.protocol = "https:"
-    }
-    this.url = uri;
     callback(null, this);
   }
 
   fetchGeoJson(callback){
-    getBikeParks(this.url, (err, geojson) => {
+    getBikeParks(url, (err, geojson) => {
       if (err) {
         callback(err);
         return;
